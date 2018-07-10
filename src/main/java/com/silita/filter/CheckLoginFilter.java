@@ -2,7 +2,6 @@ package com.silita.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.silita.utils.PropertiesUtils;
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Base64;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by zhangxiahui on 17/7/26.
@@ -30,7 +30,7 @@ public class CheckLoginFilter implements Filter {
         String sign = null;
         String timestamp = null;
         String clientId = null;
-        Map<String, String> parameters = new HashedMap();
+        Map<String, String> parameters = new TreeMap<>();
         if (xToken != null) {
             String[] token = xToken.split("\\.");
             if (token.length == 2) {
@@ -42,7 +42,7 @@ public class CheckLoginFilter implements Filter {
                     clientId = jsonObject.getString("clientId");
                     timestamp = jsonObject.getString("timestamp");
                     parameters.put("clientId", clientId);
-//                    parameters.put("timestamp", timestamp);
+                    parameters.put("timestamp", timestamp);
                 } catch (Exception e) {
                     response.setCharacterEncoding("utf-8");
                     response.setContentType("application/json; charset=utf-8");

@@ -9,10 +9,7 @@ import com.silita.utils.SignConvertUtils;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 给项目部demo
@@ -28,12 +25,13 @@ public class ProjectDepLoginTest {
         String sign = "";
         String xtoken = "";
         try {
-            Map<String, String> parameters = new HashMap<>();
+            //注：Map需要有序
+            Map<String, String> parameters = new TreeMap<>();
             //TODO: 生成签名
             parameters.put("clientId", tenantId);
+            parameters.put("timestamp", Long.valueOf(System.currentTimeMillis()).toString());
             sign = ProjectDepLoginTest.generateMD5Sign(secret, parameters);
             //TODO: 生成Token
-            parameters.put("timestamp", Long.valueOf(System.currentTimeMillis()).toString());
             String parameterJson = JSONObject.toJSONString(parameters);
             String asB64 = Base64.getEncoder().encodeToString(parameterJson.getBytes("utf-8"));
             xtoken = sign + "." + asB64;

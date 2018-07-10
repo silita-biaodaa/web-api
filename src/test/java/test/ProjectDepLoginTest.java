@@ -24,7 +24,7 @@ import java.util.Set;
 public class ProjectDepLoginTest {
     public static void main(String[] args) {
         String tenantId = "jindie";
-        String secret = PropertiesUtils.getProperty("CONTENT_SECRET");
+        String secret = "9dF74HlkgsAckjQfLA9OXSc46#04*13tEsT";
         String sign = "";
         String xtoken = "";
         try {

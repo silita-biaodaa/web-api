@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api")
+@RequestMapping("/companyApi")
 public class ApiController {
 
     private static Logger logger = Logger.getLogger(ApiController.class);

@@ -31,8 +31,13 @@ public class ApiService {
             return resultMap;
         }
 
-        //TODO: 获取人员表
-        companyMap.put("tabCode", tbCompanyMapper.queryProvinceCode(MapUtils.getString(companyMap, "regisAddress")));
+        if(companyMap.get("regisAddress").toString().contains("湖南")){
+            companyMap.put("tabCode","hunan");
+        }else {
+            //TODO: 获取人员表
+            companyMap.put("tabCode", tbCompanyMapper.queryProvinceCode(MapUtils.getString(companyMap, "regisAddress")));
+        }
+
 
 
         Page page = new Page();

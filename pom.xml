@@ -18,7 +18,7 @@
         <aspectjweaver.version>1.6.8</aspectjweaver.version>
 
         <cglib.version>2.2</cglib.version>
-        <mybatis.version>3.1.1</mybatis.version>
+        <mybatis.version>3.2.8</mybatis.version>
         <mybatis-spring.version>1.1.0</mybatis-spring.version>
 
         <jstl.version>1.2</jstl.version>
@@ -38,7 +38,7 @@
         <elasticsearch.version>1.4.4</elasticsearch.version>
         <elasticsearch-analysis-ik.version>1.10.1</elasticsearch-analysis-ik.version>
         <spring-data-elasticsearch.version>1.2.0.RELEASE</spring-data-elasticsearch.version>
-
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webSourceDirectory>src/main/webapp</webSourceDirectory>
         <minimizedResource>true</minimizedResource>
     </properties>
@@ -192,6 +192,14 @@
             <artifactId>mybatis</artifactId>
             <version>${mybatis.version}</version>
         </dependency>
+
+        <!--mybatis分页插件-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>

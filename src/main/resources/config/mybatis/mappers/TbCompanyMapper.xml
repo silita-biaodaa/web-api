@@ -36,8 +36,7 @@
     </select>
 
     <select id="queryCompanyQual" parameterType="java.util.Map" resultType="java.util.Map">
-        select corpid as corpid
-                ,tab as tab
+        select tab as tab
                 ,qual_type as qualType
                 ,cert_no as certNo
                 ,cert_org as certOrg
@@ -46,7 +45,6 @@
                 ,qual_name as qualName
                 ,`range` as `range`
                 ,url as url
-                ,com_id as comId
                 ,com_name as comName
         from tb_company_qualification
         where com_id = #{comId}

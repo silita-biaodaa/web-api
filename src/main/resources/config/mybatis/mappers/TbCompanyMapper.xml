@@ -27,7 +27,7 @@
                 ,t.regis_address as regisAddress
         from tb_company t
         where t.com_name = #{comName}
-        order by t.created desc
+        order by t.created asc
         limit 1
     </select>
 

@@ -54,6 +54,12 @@ public class ApiService {
         resultMap.put("pageSize", pageInfo.getPageSize());
         resultMap.put("total", pageInfo.getTotal());
         resultMap.put("pages", pageInfo.getPages());
+        if(pageNo > pageInfo.getPages()){
+            resultMap = new HashMap<>();
+            resultMap.put("code",2);
+            resultMap.put("msg","页数大于总页数，请重新输入!");
+            return resultMap;
+        }
         resultMap.put("code", 1);
         resultMap.put("msg", "操作成功!");
         return resultMap;

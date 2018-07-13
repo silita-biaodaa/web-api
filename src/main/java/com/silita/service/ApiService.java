@@ -80,7 +80,7 @@ public class ApiService {
         // TODO: 查询资质
         List<Map<String, Object>> list = new ArrayList<>();
         list = queryCompanyQualification(companyMap);
-        if (null == list && list.size() == 0) {
+        if (null == list || list.size() == 0) {
             resultMap.put("code", 204);
             resultMap.put("msg", "未查询到相关数据!");
             return resultMap;

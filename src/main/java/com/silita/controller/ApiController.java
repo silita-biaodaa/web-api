@@ -32,7 +32,7 @@ public class ApiController {
             return resultMap;
         }catch (Exception e){
             logger.error("数据查询失败",e);
-            resultMap.put("code",0);
+            resultMap.put("code",500);
             resultMap.put("msg","数据查询失败!");
             return resultMap;
         }
@@ -52,7 +52,7 @@ public class ApiController {
             return resultMap;
         }catch (Exception e){
             logger.error("数据查询失败",e);
-            resultMap.put("code",0);
+            resultMap.put("code",500);
             resultMap.put("msg","数据查询失败!");
             return resultMap;
         }

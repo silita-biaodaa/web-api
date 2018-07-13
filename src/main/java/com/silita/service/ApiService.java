@@ -26,7 +26,7 @@ public class ApiService {
         // TODO: 获取公司id
         Map<String, Object> companyMap = tbCompanyMapper.queryCompanyInfo(param);
         if (null == companyMap) {
-            resultMap.put("code", 1);
+            resultMap.put("code", 204);
             resultMap.put("msg", "未查询到相关数据!");
             return resultMap;
         }
@@ -46,7 +46,9 @@ public class ApiService {
         PageHelper.startPage(page.getCurrentPage(), page.getPageSize());
         List<Map<String, Object>> person = tbCompanyMapper.queryPersonList(companyMap);
         if (null == person || person.size() == 0) {
-            person = new ArrayList<>();
+            resultMap.put("code", 204);
+            resultMap.put("msg", "未查询到相关数据!");
+            return resultMap;
         }
         PageInfo pageInfo = new PageInfo(person);
         resultMap.put("data", pageInfo.getList());
@@ -54,10 +56,10 @@ public class ApiService {
         resultMap.put("pageSize", pageInfo.getPageSize());
         resultMap.put("total", pageInfo.getTotal());
         resultMap.put("pages", pageInfo.getPages());
-        if(pageNo > pageInfo.getPages()){
+        if (pageNo > pageInfo.getPages()) {
             resultMap = new HashMap<>();
-            resultMap.put("code",2);
-            resultMap.put("msg","页数大于总页数，请重新输入!");
+            resultMap.put("code", 416);
+            resultMap.put("msg", "页数大于总页数，请重新输入!");
             return resultMap;
         }
         resultMap.put("code", 1);
@@ -70,7 +72,7 @@ public class ApiService {
         // TODO: 获取公司id
         Map<String, Object> companyMap = tbCompanyMapper.queryCompanyInfo(param);
         if (null == companyMap) {
-            resultMap.put("code", 1);
+            resultMap.put("code", 204);
             resultMap.put("msg", "未查询到相关数据!");
             return resultMap;
         }
@@ -78,6 +80,11 @@ public class ApiService {
         // TODO: 查询资质
         List<Map<String, Object>> list = new ArrayList<>();
         list = queryCompanyQualification(companyMap);
+        if (null == list && list.size() == 0) {
+            resultMap.put("code", 204);
+            resultMap.put("msg", "未查询到相关数据!");
+            return resultMap;
+        }
         resultMap.put("data", list);
         resultMap.put("code", 1);
         resultMap.put("msg", "操作成功!");
@@ -92,7 +99,7 @@ public class ApiService {
             if (null != qual.get("qualType") && null != qual.get("range")) {
                 String[] range = MapUtils.getString(qual, "range").split(",");
                 for (int i = 0; i < range.length; i++) {
-                    Map<String,Object> map = initMap(qual);
+                    Map<String, Object> map = initMap(qual);
                     map.put("qualName", range[i]);
                     qualList.add(map);
                 }
@@ -102,16 +109,16 @@ public class ApiService {
     }
 
 
-    private Map<String,Object> initMap (Map<String,Object> param){
-        Map<String,Object> initMap = new HashMap<>();
-        initMap.put("tab",param.get("tab"));
-        initMap.put("certNo",param.get("certNo"));
-        initMap.put("certOrg",param.get("certOrg"));
-        initMap.put("certDate",param.get("certDate"));
-        initMap.put("validDate",param.get("validDate"));
-        initMap.put("url",param.get("url"));
-        initMap.put("comName",param.get("comName"));
-        initMap.put("qualType",param.get("qualType"));
+    private Map<String, Object> initMap(Map<String, Object> param) {
+        Map<String, Object> initMap = new HashMap<>();
+        initMap.put("tab", param.get("tab"));
+        initMap.put("certNo", param.get("certNo"));
+        initMap.put("certOrg", param.get("certOrg"));
+        initMap.put("certDate", param.get("certDate"));
+        initMap.put("validDate", param.get("validDate"));
+        initMap.put("url", param.get("url"));
+        initMap.put("comName", param.get("comName"));
+        initMap.put("qualType", param.get("qualType"));
         return initMap;
     }
 }

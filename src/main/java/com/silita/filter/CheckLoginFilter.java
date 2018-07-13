@@ -47,7 +47,7 @@ public class CheckLoginFilter implements Filter {
                     response.setCharacterEncoding("utf-8");
                     response.setContentType("application/json; charset=utf-8");
                     PrintWriter out = response.getWriter();
-                    out.print("{\"code\":0,\"msg\":\"没权限\"}");
+                    out.print("{\"code\":401,\"msg\":\"没权限\"}");
                     return;
                 }
             }
@@ -60,7 +60,7 @@ public class CheckLoginFilter implements Filter {
             //TODO: 是否金蝶调用
             if (!clientId.equals(PropertiesUtils.getProperty("CLIENT_ID"))) {
                 PrintWriter out = response.getWriter();
-                out.print("{\"code\":0,\"msg\":\"没权限\"}");
+                out.print("{\"code\":401,\"msg\":\"没权限\"}");
                 return;
             }
             //TODO: 是否超时
@@ -69,7 +69,7 @@ public class CheckLoginFilter implements Filter {
             Long sutimetamp = systimestamp - patimestamp;
             if ((sutimetamp / (1000 * 60)) > 5) {
                 PrintWriter out = response.getWriter();
-                out.print("{\"code\":0,\"msg\":\"X-TOKEN超时,请重新获取\"}");
+                out.print("{\"code\":407,\"msg\":\"X-TOKEN超时,请重新获取\"}");
                 return;
             }
             LOGGER.debug("进入系统Filter,开始API调用");
@@ -78,7 +78,7 @@ public class CheckLoginFilter implements Filter {
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/json; charset=utf-8");
             PrintWriter out = response.getWriter();
-            out.print("{\"code\":0,\"msg\":\"没权限\"}");
+            out.print("{\"code\":401,\"msg\":\"没权限\"}");
         }
     }
 

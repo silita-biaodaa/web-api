@@ -33,11 +33,6 @@
         <jsp-api.version>2.0</jsp-api.version>
         <jta.version>1.1</jta.version>
 
-        <ehcache.version>2.6.11</ehcache.version>
-        <kafka.version>1.0.0</kafka.version>
-        <elasticsearch.version>1.4.4</elasticsearch.version>
-        <elasticsearch-analysis-ik.version>1.10.1</elasticsearch-analysis-ik.version>
-        <spring-data-elasticsearch.version>1.2.0.RELEASE</spring-data-elasticsearch.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <webSourceDirectory>src/main/webapp</webSourceDirectory>
         <minimizedResource>true</minimizedResource>
@@ -150,6 +145,7 @@
             <version>${bonecp.version}</version>
         </dependency>
 
+        <!-- apache commons -->
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
@@ -158,19 +154,13 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.1</version>
+            <version>3.5</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>${ant.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.9</version>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
         </dependency>
 
         <!-- Spring aop -->
@@ -219,13 +209,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- disruptor -->
-        <dependency>
-            <groupId>com.lmax</groupId>
-            <artifactId>disruptor</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-
         <!-- 以下是redis依赖包 -->
         <!-- Redis客户端jedis依赖 -->
         <dependency>
@@ -241,7 +224,6 @@
             <version>1.5.0.RELEASE</version>
         </dependency>
         <!-- 以上是redis依赖包 -->
-
 
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -260,30 +242,16 @@
             <version>${taglibs.version}</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
 
-        <!--<dependency>
-          <groupId>com.google.code.gson</groupId>
-          <artifactId>gson</artifactId>
-          <version>2.3.1</version>
-        </dependency>-->
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.6.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.2.2</version>
         </dependency>
 
         <dependency>
@@ -318,37 +286,18 @@
             <version>3.10.1</version>
         </dependency>
 
-        <!--ehcache -->
+        <!-- hbase-client -->
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>${ehcache.version}</version>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>2.1.1</version>
         </dependency>
 
-        <!--kafka -->
         <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.11</artifactId>
-            <version>${kafka.version}</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0.1</version>
         </dependency>
-
-        <!-- elasticsearch-->
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>${elasticsearch.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch-analysis-ik</artifactId>
-            <version>${elasticsearch-analysis-ik.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-elasticsearch</artifactId>
-            <version>${spring-data-elasticsearch.version}</version>
-        </dependency>
-
     </dependencies>
 
     <build>

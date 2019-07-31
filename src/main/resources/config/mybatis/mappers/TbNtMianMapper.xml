@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silita.dao.TbNtMianMapper">
+
+    <sql id="noticeTypeConvert">
+        ( case mian.biness_type
+        when '01' then '施工'
+        when '02' then '监理'
+        when '03' then '设计'
+        when '04' then '勘察'
+        when '05' then '采购'
+        when '06' then '其他'
+        when '07' then 'PPP'
+        when '08' then '设计施工'
+        when '09' then 'EPC'
+        when '10' then '检测'
+        when '11' then '施工采购'
+        when '12' then '造价咨询'
+        when '13' then '招标代理'
+        else '其他' end) as projectType
+    </sql>
+
+    <sql id="noticeType">
+        ( case mian.nt_type
+        when '01' then '一般公告'
+        when '02' then '磋商公告'
+        when '03' then '补充公告'
+        when '04' then '答疑公告'
+        when '05' then '流标公告'
+        when '06' then '澄清公告'
+        when '07' then '延期公告'
+        when '08' then '变更/更正/更改公告'
+        when '09' then '废标公告'
+        when '10' then '终止公告'
+        when '11' then '修改公告'
+        when '12' then '招标控制价'
+        when '13' then '资审结果'
+        when '14' then '资格预审'
+        when '15' then '入围公告'
+        when '16' then '暂停公告'
+        when '17' then '合同公告'
+        when '18' then '结果公告'
+        when '19' then '成交公告'
+        else '其他公告' end) as noticeType
+    </sql>
+
+    <!--查询中标列表-->
+    <select id="queryZhongbiaoList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        mian.pkid as id,
+        mian.title,
+        bids.f_candidate as oneName,
+        bids.f_quote as oneOffer,
+        mian.pub_date as openDate,
+        mian.source,
+        mian.provice_code as provice,
+        mian.city_code as city,
+        mian.snatch_id as snatchId,
+        <include refid="noticeType"/>,
+        <include refid="noticeTypeConvert"/>,
+        mian.nt_category as type,
+        bids.pb_mode as pbMode
+        FROM
+        biaodaa_admin.tb_nt_mian_${regions} mian
+        INNER JOIN biaodaa_admin.tb_nt_bids_${regions} bids
+        ON mian.`pkid` = bids.`nt_id`
+        WHERE 1 = 1
+        and mian.nt_category='2'
+        and CAST(mian.nt_type as SIGNED) &lt; 100
+        AND mian.`pub_date` &gt;= DATE_SUB(NOW(),INTERVAL 100 DAY)
+        AND mian.`pub_date` &lt;= NOW()
+        <if test="regions != null and regions != ''">
+            and mian.provice_code=#{regions}
+        </if>
+        <if test="citys != null and citys.size() > 0">
+            and (
+            <foreach collection="citys" item="citys" separator="or">
+                mian.city_code = #{cityCodeList}
+            </foreach>
+            )
+        </if>
+        ORDER BY mian.pub_date DESC
+    </select>
+
+    <!--查询招标列表-->
+    <select id="queryZhaobiaoList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        mian.pkid AS id,
+        mian.`title`,
+        mian.snatch_id as snatchId,
+        mian.`pub_date` AS openDate,
+        tenders.qua_name AS certificate,
+        mian.source,
+        mian.provice_code as provice,
+        mian.city_code as city,
+        <include refid="noticeType"/>,
+        <include refid="noticeTypeConvert"/>,
+        mian.nt_category AS `type`,
+        (SELECT t.`name` FROM biaodaa_admin.dic_common t WHERE t.`code` = tenders.`pb_mode` AND t.`type` =
+        '${pdModeType}') AS pbMode
+        FROM biaodaa_admin.tb_nt_tenders_${regions} tenders
+        JOIN biaodaa_admin.tb_nt_mian_${regions} mian
+        ON mian.pkid = tenders.nt_id
+        WHERE 1 = 1
+        AND mian.`pub_date` &gt;= DATE_SUB(NOW(),INTERVAL 100 DAY)
+        AND mian.`pub_date` &lt;= NOW()
+        and mian.nt_category='1'
+        and CAST(mian.nt_type as SIGNED) &lt; 100
+        <if test="regions != null and regions != ''">
+            and mian.provice_code=#{regions}
+        </if>
+        <if test="citys != null and citys.size() > 0">
+            and (
+            <foreach collection="citys" item="citys" separator="or">
+                mian.city_code=#{citys}
+            </foreach>
+            )
+        </if>
+        ORDER BY mian.`pub_date` DESC
+    </select>
+
+    <!--查询公告主表相关字段-->
+    <select id="queryMianParam" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+          provice_code AS proviceCode,
+          city_code AS cityCode,
+          snatch_id AS snatchId,
+          pro.`area_name` AS proviceCn,
+          cit.`area_name` AS cityCn
+        FROM
+          biaodaa_admin.tb_nt_mian_${source} t1
+        LEFT JOIN biaodaa_admin.`sys_area` pro ON t1.`provice_code` = pro.`area_code` AND pro.`area_level` = 1
+        LEFT JOIN biaodaa_admin.`sys_area` cit ON cit.`area_code` = t1.`city_code` AND cit.`area_level` = 2
+        WHERE t1.pkid = #{id}
+    </select>
+
+    <!--查询招标公告详情-->
+    <select id="queryZhaobiaoDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        mian.pkid AS id,
+        mian.`title`,
+        mian.`pub_date` AS openDate,
+        mian.`city_code` as city,
+        common.name AS pbMode,
+        <include refid="noticeType"/>,
+        <include refid="noticeTypeConvert"/>,
+        tenders.qua_name AS zzRank,
+        mian.snatch_id AS snatchId,
+        mian.nt_category as type,
+        mian.url
+        FROM
+        biaodaa_admin.tb_nt_mian_${source} mian
+        JOIN biaodaa_admin.tb_nt_tenders_${source} tenders
+        ON mian.pkid = tenders.nt_id
+        LEFT JOIN biaodaa_admin.dic_common common
+        ON tenders.`pb_mode` = common.`code`
+        WHERE mian.pkid = #{id}
+        and mian.nt_category='1'
+    </select>
+
+    <!--查询中标公告详情-->
+    <select id="queryZhongbiaoDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        mian.pkid as id,
+        mian.`seg_count` as block,
+        mian.title,
+        bids.f_candidate as oneName,
+        bids.f_quote as oneOffer,
+        mian.pub_date as openDate,
+        <include refid="noticeType"/>,
+        <include refid="noticeTypeConvert"/>,
+        mian.source,
+        mian.nt_category as `type`,
+        mian.url,
+        CONCAT(#{provice},#{city}) AS projDq
+        FROM
+        biaodaa_admin.tb_nt_bids_${source} bids
+        JOIN biaodaa_admin.tb_nt_mian_${source} mian
+        ON mian.`pkid` = bids.`nt_id`
+        WHERE mian.pkid=#{id}
+        and mian.nt_category='2'
+    </select>
+</mapper>

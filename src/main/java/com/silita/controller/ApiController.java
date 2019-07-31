@@ -4,14 +4,16 @@ import com.silita.service.ApiService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/companyApi")
-public class ApiController {
+public class ApiController extends BaseController {
 
     private static Logger logger = Logger.getLogger(ApiController.class);
 
@@ -20,41 +22,35 @@ public class ApiController {
 
     /**
      * 人员
+     *
      * @param param
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/person", method = RequestMethod.POST)
-    public Map<String,Object> person(@RequestBody Map<String,Object> param){
-        Map<String,Object> resultMap = new HashMap<>();
+    public Map<String, Object> person(@RequestBody Map<String, Object> param) {
         try {
-            resultMap = apiService.getPerson(param);
-            return resultMap;
-        }catch (Exception e){
-            logger.error("数据查询失败",e);
-            resultMap.put("code",500);
-            resultMap.put("msg","数据查询失败!");
-            return resultMap;
+            return apiService.getPerson(param);
+        } catch (Exception e) {
+            logger.error("数据查询失败", e);
+            return errorMsg();
         }
     }
 
     /**
      * 资质
+     *
      * @param param
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/qual", method = RequestMethod.POST)
-    public Map<String,Object> qual(@RequestBody Map<String,Object> param){
-        Map<String,Object> resultMap = new HashMap<>();
+    public Map<String, Object> qual(@RequestBody Map<String, Object> param) {
         try {
-            resultMap = apiService.getCompanyQual(param);
-            return resultMap;
-        }catch (Exception e){
-            logger.error("数据查询失败",e);
-            resultMap.put("code",500);
-            resultMap.put("msg","数据查询失败!");
-            return resultMap;
+            return apiService.getCompanyQual(param);
+        } catch (Exception e) {
+            logger.error("数据查询失败", e);
+            return errorMsg();
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.silita.common.redis;
+package com.silita.common;
 
 import java.io.*;
 

@@ -1,7 +1,7 @@
 package test;
 
 import base.ConfigTest;
-import com.silita.common.redis.RedisUtils;
+import com.silita.common.RedisUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

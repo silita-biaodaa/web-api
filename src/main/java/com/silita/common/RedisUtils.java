@@ -1,4 +1,4 @@
-package com.silita.common.redis;
+package com.silita.common;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

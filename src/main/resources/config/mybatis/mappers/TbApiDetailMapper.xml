@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.silita.dao.TbApiDetailMapper">
+
+    <!--添加-->
+    <insert id="insert" parameterType="java.util.Map">
+        INSERT INTO `tb_api_detail` (
+          `app_id`,
+          `request_url`,
+          `call_total`,
+          `call_count`,
+          `residue_count`,
+          `price`,
+          `created`
+        )
+        VALUES
+          (
+            #{appId},#{request_url},#{call_total},#{call_count},#{residue_count},#{price}.now()
+          )
+    </insert>
+
+    <!--修改-->
+    <update id="update" parameterType="java.util.Map">
+        UPDATE
+          `tb_api_detail`
+        SET
+          `residue_count` = #{residueCount},
+          `call_count` = #{callCount},
+          `updated` = now()
+        WHERE `pkid` = #{pkid}
+    </update>
+
+    <!--查询-->
+    <select id="queryApiDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+          t.`app_id` AS appId,
+          t.`call_total` AS callTotal,
+          t.`call_count` AS callCount,
+          t.`residue_count` AS residueCount,
+          t.`price`,
+          t.`pkid`
+        FROM
+          tb_api_detail t
+        WHERE t.`app_id` = #{appId}
+          AND t.`request_url` = #{requestUrl}
+        LIMIT 1
+    </select>
+</mapper>

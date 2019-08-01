@@ -83,6 +83,31 @@
         ORDER BY mian.pub_date DESC
     </select>
 
+    <!--查询招标总数-->
+    <select id="queryZhaobiaoTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+          COUNT(1)
+        FROM biaodaa_admin.tb_nt_tenders_${regions} tenders
+        JOIN biaodaa_admin.tb_nt_mian_${regions} mian
+        ON mian.pkid = tenders.nt_id
+        WHERE 1 = 1
+        AND mian.`pub_date` &gt;= DATE_SUB(NOW(),INTERVAL 100 DAY)
+        AND mian.`pub_date` &lt;= NOW()
+        and mian.nt_category='1'
+        and CAST(mian.nt_type as SIGNED) &lt; 100
+        <if test="regions != null and regions != ''">
+            and mian.provice_code=#{regions}
+        </if>
+        <if test="citys != null and citys.size() > 0">
+            and (
+            <foreach collection="citys" item="citys" separator="or">
+                mian.city_code=#{citys}
+            </foreach>
+            )
+        </if>
+        ORDER BY mian.`pub_date` DESC
+    </select>
+
     <!--查询招标列表-->
     <select id="queryZhaobiaoList" parameterType="java.util.Map" resultType="java.util.Map">
         SELECT
@@ -118,6 +143,7 @@
             )
         </if>
         ORDER BY mian.`pub_date` DESC
+        limit #{start},#{pageSize}
     </select>
 
     <!--查询公告主表相关字段-->
@@ -173,7 +199,7 @@
         mian.source,
         mian.nt_category as `type`,
         mian.url,
-        CONCAT(#{provice},#{city}) AS projDq
+        CONCAT('${province}','${city}') AS projDq
         FROM
         biaodaa_admin.tb_nt_bids_${source} bids
         JOIN biaodaa_admin.tb_nt_mian_${source} mian

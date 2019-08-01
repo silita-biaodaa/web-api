@@ -34,14 +34,16 @@ public class ApiDetailService {
         Integer callTotal = MapUtils.getInteger(apiMap, "callTotal");
         Integer callCount = MapUtils.getInteger(apiMap, "callCount");
         Integer residueCount = MapUtils.getInteger(apiMap, "residueCount");
-        if (callTotal - callCount < 0) {
+        if (callTotal - callCount <= 0) {
             resultMap.put("code", 405);
             resultMap.put("msg", "无权限调用！");
             return false;
         }
-        apiMap.put("callCount", callCount++);
-        apiMap.put("residueCount", residueCount--);
-        resultMap.put("residueCount",residueCount);
+        callCount += 1;
+        residueCount -= 1;
+        apiMap.put("callCount", callCount);
+        apiMap.put("residueCount", residueCount);
+        resultMap.put("residueCount", residueCount);
         tbApiDetailMapper.update(apiMap);
         return true;
     }

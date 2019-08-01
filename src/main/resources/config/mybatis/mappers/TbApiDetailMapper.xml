@@ -16,7 +16,7 @@
         )
         VALUES
           (
-            #{appId},#{request_url},#{call_total},#{call_count},#{residue_count},#{price}.now()
+            #{appId},#{requestUrl},#{callTotal},#{callCount},#{residueCount},#{price},now()
           )
     </insert>
 

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.silita.controller.vo.Page;
 import com.silita.dao.TbNtMianMapper;
+import com.silita.utils.CommonUtil;
 import com.silita.utils.HBaseUtils;
 import com.silita.utils.PropertiesUtils;
 import org.apache.commons.collections.MapUtils;
@@ -41,8 +42,8 @@ public class NoticeService {
      * @return
      */
     public Map<String, Object> listNotice(Map<String, Object> param) {
-        //调用次数限制
         Map<String, Object> resultMap = new HashMap<>();
+        //调用次数限制
         if (!apiDetailService.chechApiRemote(param, resultMap)) {
             return resultMap;
         }
@@ -50,16 +51,17 @@ public class NoticeService {
         Integer pageSize = MapUtils.getInteger(param, "pageSize") == null ? 20 : MapUtils.getInteger(param, "pageSize");
         //解析地址
         analysisRegions(param);
-        Page page = new Page();
-        page.setCurrentPage(pageNo);
-        page.setPageSize(pageSize);
-
-        PageHelper.startPage(page.getCurrentPage(), page.getPageSize());
         List<Map<String, Object>> list = new ArrayList<>();
         if ("zhongbiao".equals(param.get("type"))) {
+            Page page = new Page();
+            page.setCurrentPage(pageNo);
+            page.setPageSize(pageSize);
+            PageHelper.startPage(page.getCurrentPage(), page.getPageSize());
             list = tbNtMianMapper.queryZhongbiaoList(param);
         } else {
-            list = tbNtMianMapper.queryZhaobiaoList(param);
+            //取消第三方插件分页
+            param.put("pdModeType", MapUtils.getString(param, "source") + "_pbmode");
+            return pageZhaobiaoList(pageNo, pageSize, param, resultMap);
         }
         PageInfo pageInfo = new PageInfo(list);
         resultMap.put("data", pageInfo.getList());
@@ -67,6 +69,39 @@ public class NoticeService {
         resultMap.put("pageSize", pageInfo.getPageSize());
         resultMap.put("total", pageInfo.getTotal());
         resultMap.put("pages", pageInfo.getPages());
+        resultMap.put("code", 1);
+        resultMap.put("msg", "操作成功!");
+        return resultMap;
+    }
+
+    /**
+     * 自定义分页(zhaobiao)
+     *
+     * @param pageNo
+     * @param pageSize
+     * @param param
+     * @param resultMap
+     * @return
+     */
+    private Map<String, Object> pageZhaobiaoList(Integer pageNo, Integer pageSize, Map<String, Object> param, Map<String, Object> resultMap) {
+        resultMap.put("code", 1);
+        resultMap.put("msg", "操作成功!");
+        Integer total = tbNtMianMapper.queryZhaobiaoTotal(param);
+        if (total <= 0) {
+            resultMap.put("data", new ArrayList<>());
+            resultMap.put("pageNo", pageNo);
+            resultMap.put("pageSize", pageSize);
+            resultMap.put("total", 0);
+            resultMap.put("pages", 0);
+            return resultMap;
+        }
+        Integer pages = CommonUtil.getPages(total, pageSize);
+        param.put("start", (pageNo - 1) * pageSize);
+        resultMap.put("data", tbNtMianMapper.queryZhaobiaoList(param));
+        resultMap.put("pageNo", pageNo);
+        resultMap.put("pageSize", pageSize);
+        resultMap.put("total", total);
+        resultMap.put("pages", pages);
         resultMap.put("code", 1);
         resultMap.put("msg", "操作成功!");
         return resultMap;
@@ -92,12 +127,13 @@ public class NoticeService {
             result = tbNtMianMapper.queryZhaobiaoDetail(param);
         }
         //查询内容
-        if (MapUtils.isEmpty(result)) {
-            result.put("content",getContent(MapUtils.getString(noticeParam,"snatchId")));
+        if (MapUtils.isNotEmpty(result)) {
+            result.put("content", getContent("39168bf5fcd3f555c1a05cbd0b5a3e74"));
         }
-        result.put("code",1);
-        result.put("msg","操作成功!");
-        return result;
+        resultMap.put("code", 1);
+        resultMap.put("msg", "操作成功!");
+        resultMap.put("data", result);
+        return resultMap;
     }
 
     /**
@@ -128,7 +164,7 @@ public class NoticeService {
         String content = "";
         try {
             connection = HBaseUtils.init(ip, port, master, hdfs);
-            Table table = connection.getTable(TableName.valueOf("gsxt"));
+            Table table = connection.getTable(TableName.valueOf("notice"));
             Get get = new Get(snatchId.getBytes());
             Result result = table.get(get);
             if (null != result.rawCells()) {

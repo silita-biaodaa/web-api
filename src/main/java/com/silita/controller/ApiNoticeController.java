@@ -46,9 +46,8 @@ public class ApiNoticeController extends BaseController{
             return noticeService.listNotice(param);
         } catch (Exception e) {
             logger.error("获取公告失败！",e);
-            errorMsg();
+            return errorMsg();
         }
-        return resultMap;
     }
 
     /**
@@ -72,9 +71,8 @@ public class ApiNoticeController extends BaseController{
             return noticeService.listNotice(param);
         } catch (Exception e) {
             logger.error("获取公告失败！",e);
-            errorMsg();
+            return errorMsg();
         }
-        return resultMap;
     }
 
     /**
@@ -154,7 +152,7 @@ public class ApiNoticeController extends BaseController{
             Map<String,Object> checkMap = new HashedMap(){{
                 put("code",404);
             }};
-            checkMap.put("msg","参数appId不能为空！");
+            checkMap.put("msg","参数source不能为空！");
             return checkMap;
         }
         return null;

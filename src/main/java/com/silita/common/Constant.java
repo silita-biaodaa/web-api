@@ -15,7 +15,7 @@ public class Constant {
      * request url
      */
     public static String REQUEST_URL_LIST_ZHONGBIAO = "/zhongbiao/list";
-    public static String REQUEST_URL_LIST_ZHAOBIAO = "/zhong/list";
-    public static String REQUEST_URL_DETAIL_ZHAOBIAO = "/zhao/detail";
+    public static String REQUEST_URL_LIST_ZHAOBIAO = "/zhaobiao/list";
+    public static String REQUEST_URL_DETAIL_ZHAOBIAO = "/zhaobiao/detail";
     public static String REQUEST_URL_DETAIL_ZHONGBIAO= "/zhongbiao/detail";
 }

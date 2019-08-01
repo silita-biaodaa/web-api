@@ -17,6 +17,12 @@ public interface TbNtMianMapper {
     List<Map<String,Object>> queryZhongbiaoList(Map<String,Object> param);
 
     /**
+     * 查询招标总数
+     * @return
+     */
+    int queryZhaobiaoTotal(Map<String,Object> param);
+
+    /**
      * 查询招标列表
      * @param param
      * @return

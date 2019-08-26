@@ -59,7 +59,6 @@ public class ApiNoticeController extends BaseController{
     @ResponseBody
     @RequestMapping(value = "/zhaobiao/list", method = RequestMethod.POST, produces = "application/json;charset=utf-8")
     public Map listZhaobiao(@RequestBody Map<String, Object> param) {
-        Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
             //校验参数
             Map check = this.checkParam(param);

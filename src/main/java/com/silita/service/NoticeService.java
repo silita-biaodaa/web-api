@@ -128,7 +128,7 @@ public class NoticeService {
         }
         //查询内容
         if (MapUtils.isNotEmpty(result)) {
-            result.put("content", getContent("39168bf5fcd3f555c1a05cbd0b5a3e74"));
+            result.put("content", getContent(MapUtils.getString(noticeParam,"snatchId")));
         }
         resultMap.put("code", 1);
         resultMap.put("msg", "操作成功!");
